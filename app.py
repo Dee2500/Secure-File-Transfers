@@ -18,6 +18,12 @@ def upload_file():
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
 
+    # Log the received file details
+    print(f"Received file: {file.filename}, size: {len(file.read())} bytes")
+
+    # Reset the file pointer
+    file.seek(0)
+
     # Encrypt the file
     file_data = file.read()
     encrypted_data = cipher.encrypt(file_data)
