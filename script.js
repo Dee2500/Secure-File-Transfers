@@ -6,19 +6,20 @@ document.getElementById('upload-form').addEventListener('submit', async function
     const messageDiv = document.getElementById('message');
 
     if (file) {
-        const reader = new FileReader();
-        reader.onload = async function() {
-            const fileData = reader.result;
-            // Here you would send fileData to your backend API for encryption and storage
-            // For example:
-            // const response = await fetch('YOUR_BACKEND_API_URL/upload', {
-            //     method: 'POST',
-            //     body: fileData
-            // });
-            // const result = await response.text();
-            messageDiv.innerText = 'File uploaded (simulated).';
-        };
-        reader.readAsArrayBuffer(file);
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('https://secure-file-transfers.onrender.com/upload', { // Your backend URL
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            messageDiv.innerText = result.message;
+        } catch (error) {
+            messageDiv.innerText = 'Error uploading file.';
+        }
     } else {
         messageDiv.innerText = 'No file selected.';
     }
